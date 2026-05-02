@@ -1,0 +1,162 @@
+# =========================
+
+# General
+
+# =========================
+
+notes/
+
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+*.out
+*.err
+
+# =========================
+
+# IDE / Editor
+
+# =========================
+
+.vscode/
+.idea/
+*.iml
+
+# =========================
+
+# Node (Angular / React)
+
+# =========================
+
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Build outputs
+
+dist/
+build/
+.out/
+.next/
+.angular/
+coverage/
+
+# Environment files
+
+.env
+.env.*
+!.env.example
+
+# =========================
+
+# Java (Spring Boot etc.)
+
+# =========================
+
+target/
+*.class
+*.jar
+*.war
+*.ear
+
+# Maven
+
+.mvn/
+!.mvn/wrapper/maven-wrapper.jar
+
+# Gradle
+
+.gradle/
+build/
+
+# =========================
+
+# Python
+
+# =========================
+
+**pycache**/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+
+venv/
+env/
+.venv/
+
+# Distribution
+
+build/
+dist/
+*.egg-info/
+
+# Pytest / coverage
+
+.pytest_cache/
+.coverage
+htmlcov/
+
+# =========================
+
+# OS / Misc
+
+# =========================
+
+*.pid
+*.seed
+*.pid.lock
+
+# =========================
+
+# Docker
+
+# =========================
+
+docker-compose.override.yml
+
+# =========================
+
+# Terraform (if you use it later)
+
+# =========================
+
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+
+# =========================
+
+# Logs
+
+# =========================
+
+logs/
+*.log
+
+# =========================
+
+# Secrets / Keys
+
+# =========================
+
+*.pem
+*.key
+*.crt
+secrets.yml
+
+# =========================
+
+# Misc Build Systems
+
+# =========================
+
+*.tsbuildinfo
+.cache/
