@@ -1,0 +1,33 @@
+spring:
+  application:
+    name: merkado
+  datasource:
+#    url: jdbc:postgresql://localhost:5432/merkado?currentSchema=prod
+    url: jdbc:postgresql://localhost:5432/merkado
+    username: merkado_user
+    password: merkado_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+#        default_schema: prod
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+
+  jackson:
+    serialization:
+      indent-output: true
+
+server:
+  port: 8080
+
+jwt:
+  secret: mysecretkeymysecretkeymysecretkey
