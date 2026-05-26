@@ -18,7 +18,7 @@ export default function MePage() {
       const result =
         await axios.get(
 
-          "http://localhost:8080/api/v1/users/me",
+          "https://merkado-api.tech-labs.dev/api/v1/users/me",
 
           {
             headers: {
