@@ -20,7 +20,7 @@ jobs:
     steps:
 
       - name: SSH Deploy
-        uses: appleboy/ssh-action@v1.0.3
+        uses: appleboy/ssh-action@v1 
 
         with:
           host: ${{ secrets.VPS_HOST }}
