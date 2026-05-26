@@ -31,3 +31,10 @@ server:
 
 jwt:
   secret: mysecretkeymysecretkeymysecretkey
+
+logging:
+  file:
+    name: logs/application.log
+  level:
+    root: info
+    biz.michael_maldo.merkado: debug
