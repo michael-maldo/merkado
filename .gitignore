@@ -52,6 +52,9 @@ coverage/
 .env
 .env.*
 !.env.example
+!frontend/react-app/.env.development
+!frontend/react-app/.env.production
+
 
 # =========================
 
