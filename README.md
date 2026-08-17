@@ -1,5 +1,18 @@
 # 🛒 Multi-Channel Merchandising System
 
+## MVP quick start
+
+```bash
+cp .env.example .env
+docker compose up --build
+```
+
+Open `http://localhost:5173` and sign in with the development account
+`admin` / `password`. The MVP supports products and inventory, clients,
+stock-reserving orders, payment verification, packing, dispatch, cancellation,
+JWT refresh, and management/warehouse role checks. Change the seeded password
+and all values in `.env` before deploying.
+
 A production-oriented merchandising platform designed to manage products, inventory, and orders across multiple e-commerce channels including Lazada, Shopee, and TikTok Shop.
 
 This system is built using a **Domain-Driven Design (DDD) evolution approach**, starting from a pragmatic implementation and progressively refactoring into clean domain boundaries.

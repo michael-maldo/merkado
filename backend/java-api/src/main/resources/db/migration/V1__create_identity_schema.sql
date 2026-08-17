@@ -13,7 +13,8 @@ CREATE TABLE identity.users (
 
                                 enabled BOOLEAN NOT NULL DEFAULT TRUE,
 
-                                created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                                created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+                                updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE identity.user_roles (
@@ -29,6 +30,24 @@ CREATE TABLE identity.user_roles (
                                      CONSTRAINT fk_role
                                          FOREIGN KEY(role_id)
                                              REFERENCES identity.roles(id)
+);
+
+CREATE TABLE identity.refresh_tokens (
+                                         id BIGSERIAL PRIMARY KEY,
+
+                                         token VARCHAR(512) NOT NULL UNIQUE,
+
+                                         user_id BIGINT NOT NULL,
+
+                                         expires_at TIMESTAMP NOT NULL,
+
+                                         revoked BOOLEAN NOT NULL DEFAULT FALSE,
+
+                                         created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+                                         CONSTRAINT fk_user
+                                            FOREIGN KEY(user_id)
+                                                REFERENCES identity.users(id)
 );
 
 INSERT INTO identity.roles(name)

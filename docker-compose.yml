@@ -1,0 +1,33 @@
+services:
+  db:
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-merkado}
+      POSTGRES_USER: ${POSTGRES_USER:-merkado_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-merkado_password}
+    ports: ["5432:5432"]
+    volumes: ["merkado-db:/var/lib/postgresql/data"]
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+  api:
+    build: ./backend/java-api
+    environment:
+      DB_URL: jdbc:postgresql://db:5432/${POSTGRES_DB:-merkado}
+      DB_USERNAME: ${POSTGRES_USER:-merkado_user}
+      DB_PASSWORD: ${POSTGRES_PASSWORD:-merkado_password}
+      JWT_SECRET: ${JWT_SECRET:-development-secret-key-that-is-long-enough}
+    ports: ["8080:8080"]
+    depends_on:
+      db: { condition: service_healthy }
+  web:
+    build:
+      context: ./frontend/react-app
+      args:
+        VITE_API_URL: ${VITE_API_URL:-http://localhost:8080/api/v1}
+    ports: ["5173:80"]
+    depends_on: [api]
+volumes:
+  merkado-db:

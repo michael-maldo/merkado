@@ -32,6 +32,9 @@ public class DataSeeder
                 userRepository
                         .findByUsername("admin")
                         .isPresent()
+//                userRepository
+//                        .findByUsername("sales1")
+//                        .isPresent()
         ) {
             return;
         }
@@ -39,15 +42,16 @@ public class DataSeeder
         Role managementRole =
                 roleRepository
                         .findByName("MANAGEMENT")
+//                        .findByName("SALES_AGENT")
                         .orElseThrow();
 
         User admin = new User();
-
         admin.setUsername("admin");
-
         admin.setPassword(
                 passwordEncoder.encode("password")
         );
+        admin.setEnabled(true);
+        admin.setCreatedAt(java.time.LocalDateTime.now());
 
         admin.getRoles().add(managementRole);
 

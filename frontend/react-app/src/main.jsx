@@ -5,12 +5,21 @@ import ReactDOM
 
 import App from "./App";
 
+import Providers from "./app/providers";
+import {BrowserRouter} from "react-router-dom";
+
 ReactDOM.createRoot(
   document.getElementById("root")
 ).render(
 
   <React.StrictMode>
-    <App />
+    <BrowserRouter>
+        <Providers>
+
+            <App />
+
+        </Providers>
+    </BrowserRouter>
   </React.StrictMode>
 
 );

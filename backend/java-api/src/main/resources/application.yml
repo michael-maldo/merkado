@@ -3,14 +3,14 @@ spring:
     name: merkado
   datasource:
 #    url: jdbc:postgresql://localhost:5432/merkado?currentSchema=prod
-    url: jdbc:postgresql://localhost:5432/merkado
-    username: merkado_user
-    password: merkado_password
+    url: ${DB_URL:jdbc:postgresql://localhost:5432/merkado}
+    username: ${DB_USERNAME:merkado_user}
+    password: ${DB_PASSWORD:merkado_password}
     driver-class-name: org.postgresql.Driver
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: validate
     show-sql: true
     properties:
       hibernate:
@@ -30,7 +30,9 @@ server:
   port: 8080
 
 jwt:
-  secret: mysecretkeymysecretkeymysecretkey
+  secret: ${JWT_SECRET:6H6nPz6s3cN6z3Y7X6bQ5fP4mD8rR2wT9kL7aN5vM1xC8sF4}
+  access-token-expiration-minutes: 15
+  refresh-token-expiration-days: 7
 
 logging:
   file:
