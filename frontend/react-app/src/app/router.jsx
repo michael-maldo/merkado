@@ -17,6 +17,7 @@ import UsersPage from "../identity/pages/UsersPage";
 
 import ProtectedRoute from "../identity/components/ProtectedRoute";
 import HomeRedirect from "../routes/HomeRedirect";
+import GuestRoute from "../routes/GuestRoute";
 
 export default function AppRouter() {
   return (
@@ -26,7 +27,13 @@ export default function AppRouter() {
           element={<HomeRedirect/>}
       />
 
-      <Route element={<AuthLayout />}>
+      <Route
+          element={
+                <GuestRoute>
+                    <AuthLayout />
+                </GuestRoute>
+            }
+      >
         <Route path="/login" element={<LoginPage />} />
       </Route>
 
