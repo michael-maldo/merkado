@@ -16,11 +16,15 @@ import ManagementPage from "../management/pages/ManagementPage";
 import UsersPage from "../identity/pages/UsersPage";
 
 import ProtectedRoute from "../identity/components/ProtectedRoute";
+import HomeRedirect from "../routes/HomeRedirect";
 
 export default function AppRouter() {
   return (
     <Routes>
-      <Route path="/" element={<Navigate to="/login" replace />} />
+      <Route
+          path="/"
+          element={<HomeRedirect/>}
+      />
 
       <Route element={<AuthLayout />}>
         <Route path="/login" element={<LoginPage />} />
