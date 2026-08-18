@@ -1,33 +1,445 @@
 import React from "react";
-import { Box, Button, Chip, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, Paper, Stack, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Chip,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  Grid,
+  Paper,
+  Stack,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Typography,
+} from "@mui/material";
 
-const money = (value, currency = "AUD") => new Intl.NumberFormat("en-AU", { style: "currency", currency }).format(Number(value || 0));
-const show = value => value === null || value === undefined || value === "" ? "—" : value;
-function Fact({ label, value }) { return <Box><Typography variant="caption" color="text.secondary">{label}</Typography><Typography variant="body2" fontWeight={600}>{show(value)}</Typography></Box>; }
-function Heading({ children }) { return <Typography variant="subtitle1" fontWeight={800} sx={{ mt: 2.5, mb: 1 }}>{children}</Typography>; }
-
-function VariantInventory({ variants = [], canManage, onStock }) {
-  return <>
-    <TableContainer component={Paper} variant="outlined" sx={{ display: { xs: "none", md: "block" } }}><Table size="small"><TableHead><TableRow><TableCell>Variant</TableCell><TableCell>Options</TableCell><TableCell>SKU / Barcode</TableCell><TableCell>Price</TableCell><TableCell align="right">On hand</TableCell><TableCell align="right">Reserved</TableCell><TableCell align="right">Available</TableCell><TableCell>Delivery package</TableCell>{canManage && <TableCell />}</TableRow></TableHead><TableBody>{variants.map(v => <TableRow key={v.id}><TableCell><Stack direction="row" spacing={.5} alignItems="center"><Typography variant="body2" fontWeight={700}>{v.variantName || "Default"}</Typography>{v.defaultVariant && <Chip size="small" label="Default" />}{v.active === false && <Chip size="small" label="Inactive" />}</Stack></TableCell><TableCell>{Object.entries(v.options || {}).map(([key, value]) => <Chip key={key} size="small" variant="outlined" label={`${key}: ${value}`} sx={{ mr: .5, mb: .5 }} />)}</TableCell><TableCell><Typography variant="body2">{v.sku}</Typography><Typography variant="caption" color="text.secondary">{v.barcode}</Typography></TableCell><TableCell>{money(v.sellingPrice)}</TableCell><TableCell align="right">{v.quantity}</TableCell><TableCell align="right">{v.reserved}</TableCell><TableCell align="right"><Typography fontWeight={700} color={v.available <= 5 ? "error.main" : "inherit"}>{v.available}</Typography></TableCell><TableCell>{v.packaging ? `${v.packaging.lengthCm} × ${v.packaging.widthCm} × ${v.packaging.heightCm} cm · ${v.packaging.weightKg} kg` : "—"}</TableCell>{canManage && <TableCell><Button size="small" onClick={() => onStock(v)}>Set stock</Button></TableCell>}</TableRow>)}</TableBody></Table></TableContainer>
-    <Stack spacing={1.25} sx={{ display: { xs: "flex", md: "none" } }}>{variants.map(v => <Paper key={v.id} variant="outlined" sx={{ p: 2 }}><Stack spacing={1.5}>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1}><Box><Typography fontWeight={800}>{v.variantName || "Default"}</Typography><Typography variant="caption" color="text.secondary">{v.sku} · {v.barcode}</Typography></Box><Stack direction="row" spacing={.5}>{v.defaultVariant && <Chip size="small" label="Default" />}{v.active === false && <Chip size="small" label="Inactive" />}</Stack></Stack>
-      <Stack direction="row" flexWrap="wrap" gap={.5}>{Object.entries(v.options || {}).map(([key, value]) => <Chip key={key} size="small" color="primary" variant="outlined" label={`${key}: ${value}`} />)}</Stack>
-      <Divider />
-      <Grid container spacing={1.5}><Grid size={3}><Fact label="Price" value={money(v.sellingPrice)} /></Grid><Grid size={3}><Fact label="On hand" value={v.quantity} /></Grid><Grid size={3}><Fact label="Reserved" value={v.reserved} /></Grid><Grid size={3}><Box textAlign="right"><Fact label="Available" value={v.available} /></Box></Grid></Grid>
-      <Box><Typography variant="caption" color="text.secondary">Delivery package</Typography><Typography variant="body2" fontWeight={600}>{v.packaging ? `${v.packaging.lengthCm} × ${v.packaging.widthCm} × ${v.packaging.heightCm} cm · ${v.packaging.weightKg} kg` : "—"}</Typography></Box>
-      {canManage && <Button fullWidth variant="outlined" onClick={() => onStock(v)}>Set stock</Button>}
-    </Stack></Paper>)}</Stack>
-  </>;
+const money = (value, currency = "AUD") =>
+  new Intl.NumberFormat("en-AU", { style: "currency", currency }).format(
+    Number(value || 0),
+  );
+const show = (value) =>
+  value === null || value === undefined || value === "" ? "—" : value;
+function Fact({ label, value }) {
+  return (
+    <Box>
+      <Typography variant="caption" color="text.secondary">
+        {label}
+      </Typography>
+      <Typography variant="body2" fontWeight={600}>
+        {show(value)}
+      </Typography>
+    </Box>
+  );
+}
+function Heading({ children }) {
+  return (
+    <Typography variant="subtitle1" fontWeight={800} sx={{ mt: 2.5, mb: 1 }}>
+      {children}
+    </Typography>
+  );
 }
 
-export default function ProductDetailDialog({ product, categoryBreadcrumb, onClose, canManage, onEdit, onEditVariants, onArchive, onStock, saving }) {
+function VariantInventory({ variants = [], canManage, onStock }) {
+  return (
+    <>
+      <TableContainer
+        component={Paper}
+        variant="outlined"
+        sx={{ display: { xs: "none", md: "block" } }}
+      >
+        <Table size="small">
+          <TableHead>
+            <TableRow>
+              <TableCell>Variant</TableCell>
+              <TableCell>Options</TableCell>
+              <TableCell>SKU / Barcode</TableCell>
+              <TableCell>Price</TableCell>
+              <TableCell align="right">On hand</TableCell>
+              <TableCell align="right">Reserved</TableCell>
+              <TableCell align="right">Available</TableCell>
+              <TableCell>Delivery package</TableCell>
+              {canManage && <TableCell />}
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {variants.map((v) => (
+              <TableRow key={v.id}>
+                <TableCell>
+                  <Stack direction="row" spacing={0.5} alignItems="center">
+                    <Typography variant="body2" fontWeight={700}>
+                      {v.variantName || "Default"}
+                    </Typography>
+                    {v.defaultVariant && <Chip size="small" label="Default" />}
+                    {v.active === false && (
+                      <Chip size="small" label="Inactive" />
+                    )}
+                  </Stack>
+                </TableCell>
+                <TableCell>
+                  {Object.entries(v.options || {}).map(([key, value]) => (
+                    <Chip
+                      key={key}
+                      size="small"
+                      variant="outlined"
+                      label={`${key}: ${value}`}
+                      sx={{ mr: 0.5, mb: 0.5 }}
+                    />
+                  ))}
+                </TableCell>
+                <TableCell>
+                  <Typography variant="body2">{v.sku}</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {v.barcode}
+                  </Typography>
+                </TableCell>
+                <TableCell>{money(v.sellingPrice)}</TableCell>
+                <TableCell align="right">{v.quantity}</TableCell>
+                <TableCell align="right">{v.reserved}</TableCell>
+                <TableCell align="right">
+                  <Typography
+                    fontWeight={700}
+                    color={v.available <= 5 ? "error.main" : "inherit"}
+                  >
+                    {v.available}
+                  </Typography>
+                </TableCell>
+                <TableCell>
+                  {v.packaging
+                    ? `${v.packaging.lengthCm} × ${v.packaging.widthCm} × ${v.packaging.heightCm} cm · ${v.packaging.weightKg} kg`
+                    : "—"}
+                </TableCell>
+                {canManage && (
+                  <TableCell>
+                    <Button size="small" onClick={() => onStock(v)}>
+                      Set stock
+                    </Button>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+      <Stack spacing={1.25} sx={{ display: { xs: "flex", md: "none" } }}>
+        {variants.map((v) => (
+          <Paper key={v.id} variant="outlined" sx={{ p: 2 }}>
+            <Stack spacing={1.5}>
+              <Stack
+                direction="row"
+                justifyContent="space-between"
+                alignItems="flex-start"
+                spacing={1}
+              >
+                <Box>
+                  <Typography fontWeight={800}>
+                    {v.variantName || "Default"}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    {v.sku} · {v.barcode}
+                  </Typography>
+                </Box>
+                <Stack direction="row" spacing={0.5}>
+                  {v.defaultVariant && <Chip size="small" label="Default" />}
+                  {v.active === false && <Chip size="small" label="Inactive" />}
+                </Stack>
+              </Stack>
+              <Stack direction="row" flexWrap="wrap" gap={0.5}>
+                {Object.entries(v.options || {}).map(([key, value]) => (
+                  <Chip
+                    key={key}
+                    size="small"
+                    color="primary"
+                    variant="outlined"
+                    label={`${key}: ${value}`}
+                  />
+                ))}
+              </Stack>
+              <Divider />
+              <Grid container spacing={1.5}>
+                <Grid size={3}>
+                  <Fact label="Price" value={money(v.sellingPrice)} />
+                </Grid>
+                <Grid size={3}>
+                  <Fact label="On hand" value={v.quantity} />
+                </Grid>
+                <Grid size={3}>
+                  <Fact label="Reserved" value={v.reserved} />
+                </Grid>
+                <Grid size={3}>
+                  <Box textAlign="right">
+                    <Fact label="Available" value={v.available} />
+                  </Box>
+                </Grid>
+              </Grid>
+              <Box>
+                <Typography variant="caption" color="text.secondary">
+                  Delivery package
+                </Typography>
+                <Typography variant="body2" fontWeight={600}>
+                  {v.packaging
+                    ? `${v.packaging.lengthCm} × ${v.packaging.widthCm} × ${v.packaging.heightCm} cm · ${v.packaging.weightKg} kg`
+                    : "—"}
+                </Typography>
+              </Box>
+              {canManage && (
+                <Button fullWidth variant="outlined" onClick={() => onStock(v)}>
+                  Set stock
+                </Button>
+              )}
+            </Stack>
+          </Paper>
+        ))}
+      </Stack>
+    </>
+  );
+}
+
+export default function ProductDetailDialog({
+  product,
+  categoryBreadcrumb,
+  onClose,
+  canManage,
+  onEdit,
+  onEditVariants,
+  onArchive,
+  onStock,
+  saving,
+}) {
   if (!product) return null;
-  return <Dialog open fullWidth maxWidth="lg" onClose={onClose}><DialogTitle><Stack direction="row" justifyContent="space-between" alignItems="start"><Box><Typography variant="h5" fontWeight={800}>{product.masterName}</Typography><Typography variant="body2" color="text.secondary">SPU {product.spu} · UPC {product.upc}</Typography></Box><Chip color={product.active ? "success" : "default"} label={product.active ? "Active" : "Archived"} /></Stack></DialogTitle><DialogContent dividers>
-    {product.images?.length > 0 && <Stack direction="row" spacing={1.5} sx={{ mb: 2, overflowX: "auto" }}>{product.images.map(image => <Box component="img" key={image.id} src={image.imageUrl} alt={image.altText || product.masterName} sx={{ width: 112, height: 112, objectFit: "cover", borderRadius: 2, border: 1, borderColor: "divider" }} />)}</Stack>}
-    <Grid container spacing={2}><Grid size={{ xs: 12, md: 6 }}><Fact label="Category path" value={categoryBreadcrumb || product.categoryName} /></Grid><Grid size={{ xs: 6, md: 3 }}><Fact label="Brand" value={product.brandName} /></Grid><Grid size={{ xs: 6, md: 3 }}><Fact label="Condition" value={product.condition} /></Grid><Grid size={{ xs: 6, md: 3 }}><Fact label="Minimum purchase" value={product.minimumPurchaseQuantity} /></Grid><Grid size={{ xs: 6, md: 3 }}><Fact label="Shelf life" value={product.shelfLifeDays ? `${product.shelfLifeDays} days` : null} /></Grid><Grid size={{ xs: 6, md: 3 }}><Fact label="Preorder" value={product.preorder ? "Yes" : "No"} /></Grid><Grid size={{ xs: 12, md: 6 }}><Fact label="Channels" value={product.channelListings?.map(c => `${c.channelName}: ${c.sellingStatus}`).join(" · ")} /></Grid></Grid>
-    {(product.shortDescription || product.longDescription) && <><Heading>Description</Heading><Typography variant="body2" fontWeight={600}>{product.shortDescription}</Typography><Typography variant="body2" color="text.secondary" sx={{ whiteSpace: "pre-wrap", mt: .5 }}>{product.longDescription}</Typography></>}
-    <Heading>Variants and inventory</Heading><VariantInventory variants={product.variants} canManage={canManage} onStock={onStock} />
-    <Grid container spacing={2}><Grid size={{ xs: 12, md: 6 }}><Heading>Customs information</Heading><Paper variant="outlined" sx={{ p: 2 }}><Grid container spacing={1.5}><Grid size={6}><Fact label="Chinese name" value={product.customs?.chineseName} /></Grid><Grid size={6}><Fact label="English name" value={product.customs?.englishName} /></Grid><Grid size={6}><Fact label="HS code" value={product.customs?.hsCode} /></Grid><Grid size={6}><Fact label="Invoice amount" value={product.customs?.invoiceAmount != null ? money(product.customs.invoiceAmount, product.customs.invoiceCurrency || "AUD") : null} /></Grid><Grid size={6}><Fact label="Gross weight" value={product.customs?.grossWeightKg ? `${product.customs.grossWeightKg} kg` : null} /></Grid></Grid></Paper></Grid><Grid size={{ xs: 12, md: 6 }}><Heading>Cost information</Heading><Paper variant="outlined" sx={{ p: 2 }}><Grid container spacing={1.5}><Grid size={12}><Fact label="Source URL" value={product.cost?.sourceUrl} /></Grid><Grid size={6}><Fact label="Purchase duration" value={product.cost?.purchaseDurationDays != null ? `${product.cost.purchaseDurationDays} days` : null} /></Grid><Grid size={6}><Fact label="Sales tax" value={product.cost?.salesTaxAmount != null ? money(product.cost.salesTaxAmount, product.cost.taxCurrency || "AUD") : null} /></Grid></Grid></Paper></Grid></Grid>
-    {(product.remarks1 || product.remarks2 || product.remarks3) && <><Heading>Other information</Heading><Stack divider={<Divider flexItem />} spacing={1}>{[product.remarks1, product.remarks2, product.remarks3].filter(Boolean).map((r, i) => <Typography key={i} variant="body2">{r}</Typography>)}</Stack></>}
-  </DialogContent><DialogActions>{canManage && <><Button onClick={onEditVariants} disabled={saving}>Manage variants</Button><Button onClick={onEdit} disabled={saving}>Edit master details</Button>{product.active && <Button color="error" variant="outlined" onClick={onArchive} disabled={saving}>Archive</Button>}</>}<Button variant="contained" onClick={onClose} disabled={saving}>Close</Button></DialogActions></Dialog>;
+  return (
+    <Dialog open fullWidth maxWidth="lg" onClose={onClose}>
+      <DialogTitle>
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          alignItems="start"
+        >
+          <Box>
+            <Typography variant="h5" fontWeight={800}>
+              {product.masterName}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              SPU {product.spu} · UPC {product.upc}
+            </Typography>
+          </Box>
+          <Chip
+            color={product.active ? "success" : "default"}
+            label={product.active ? "Active" : "Archived"}
+          />
+        </Stack>
+      </DialogTitle>
+      <DialogContent dividers>
+        {product.images?.length > 0 && (
+          <Stack
+            direction="row"
+            spacing={1.5}
+            sx={{ mb: 2, overflowX: "auto" }}
+          >
+            {product.images.map((image) => (
+              <Box
+                component="img"
+                key={image.id}
+                src={image.imageUrl}
+                alt={image.altText || product.masterName}
+                sx={{
+                  width: 112,
+                  height: 112,
+                  objectFit: "cover",
+                  borderRadius: 2,
+                  border: 1,
+                  borderColor: "divider",
+                }}
+              />
+            ))}
+          </Stack>
+        )}
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Fact
+              label="Category path"
+              value={categoryBreadcrumb || product.categoryName}
+            />
+          </Grid>
+          <Grid size={{ xs: 6, md: 3 }}>
+            <Fact label="Brand" value={product.brandName} />
+          </Grid>
+          <Grid size={{ xs: 6, md: 3 }}>
+            <Fact label="Condition" value={product.condition} />
+          </Grid>
+          <Grid size={{ xs: 6, md: 3 }}>
+            <Fact
+              label="Minimum purchase"
+              value={product.minimumPurchaseQuantity}
+            />
+          </Grid>
+          <Grid size={{ xs: 6, md: 3 }}>
+            <Fact
+              label="Shelf life"
+              value={
+                product.shelfLifeDays ? `${product.shelfLifeDays} days` : null
+              }
+            />
+          </Grid>
+          <Grid size={{ xs: 6, md: 3 }}>
+            <Fact label="Preorder" value={product.preorder ? "Yes" : "No"} />
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Fact
+              label="Channels"
+              value={product.channelListings
+                ?.map((c) => `${c.channelName}: ${c.sellingStatus}`)
+                .join(" · ")}
+            />
+          </Grid>
+        </Grid>
+        {(product.shortDescription || product.longDescription) && (
+          <>
+            <Heading>Description</Heading>
+            <Typography variant="body2" fontWeight={600}>
+              {product.shortDescription}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ whiteSpace: "pre-wrap", mt: 0.5 }}
+            >
+              {product.longDescription}
+            </Typography>
+          </>
+        )}
+        <Heading>Variants and inventory</Heading>
+        <VariantInventory
+          variants={product.variants}
+          canManage={canManage}
+          onStock={onStock}
+        />
+        <Grid container spacing={2}>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Heading>Customs information</Heading>
+            <Paper variant="outlined" sx={{ p: 2 }}>
+              <Grid container spacing={1.5}>
+                <Grid size={6}>
+                  <Fact
+                    label="Chinese name"
+                    value={product.customs?.chineseName}
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <Fact
+                    label="English name"
+                    value={product.customs?.englishName}
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <Fact label="HS code" value={product.customs?.hsCode} />
+                </Grid>
+                <Grid size={6}>
+                  <Fact
+                    label="Invoice amount"
+                    value={
+                      product.customs?.invoiceAmount != null
+                        ? money(
+                            product.customs.invoiceAmount,
+                            product.customs.invoiceCurrency || "AUD",
+                          )
+                        : null
+                    }
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <Fact
+                    label="Gross weight"
+                    value={
+                      product.customs?.grossWeightKg
+                        ? `${product.customs.grossWeightKg} kg`
+                        : null
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+          <Grid size={{ xs: 12, md: 6 }}>
+            <Heading>Cost information</Heading>
+            <Paper variant="outlined" sx={{ p: 2 }}>
+              <Grid container spacing={1.5}>
+                <Grid size={12}>
+                  <Fact label="Source URL" value={product.cost?.sourceUrl} />
+                </Grid>
+                <Grid size={6}>
+                  <Fact
+                    label="Purchase duration"
+                    value={
+                      product.cost?.purchaseDurationDays != null
+                        ? `${product.cost.purchaseDurationDays} days`
+                        : null
+                    }
+                  />
+                </Grid>
+                <Grid size={6}>
+                  <Fact
+                    label="Sales tax"
+                    value={
+                      product.cost?.salesTaxAmount != null
+                        ? money(
+                            product.cost.salesTaxAmount,
+                            product.cost.taxCurrency || "AUD",
+                          )
+                        : null
+                    }
+                  />
+                </Grid>
+              </Grid>
+            </Paper>
+          </Grid>
+        </Grid>
+        {(product.remarks1 || product.remarks2 || product.remarks3) && (
+          <>
+            <Heading>Other information</Heading>
+            <Stack divider={<Divider flexItem />} spacing={1}>
+              {[product.remarks1, product.remarks2, product.remarks3]
+                .filter(Boolean)
+                .map((r, i) => (
+                  <Typography key={i} variant="body2">
+                    {r}
+                  </Typography>
+                ))}
+            </Stack>
+          </>
+        )}
+      </DialogContent>
+      <DialogActions>
+        {canManage && (
+          <>
+            <Button onClick={onEditVariants} disabled={saving}>
+              Manage variants
+            </Button>
+            <Button onClick={onEdit} disabled={saving}>
+              Edit master details
+            </Button>
+            {product.active && (
+              <Button
+                color="error"
+                variant="outlined"
+                onClick={onArchive}
+                disabled={saving}
+              >
+                Archive
+              </Button>
+            )}
+          </>
+        )}
+        <Button variant="contained" onClick={onClose} disabled={saving}>
+          Close
+        </Button>
+      </DialogActions>
+    </Dialog>
+  );
 }

@@ -7,24 +7,12 @@ import { appTheme } from "../theme/theme";
 
 import { AuthProvider } from "../identity/context/AuthContext";
 
-export default function Providers({
-    children
-}) {
+export default function Providers({ children }) {
+  return (
+    <ThemeProvider theme={appTheme}>
+      <CssBaseline />
 
-    return (
-
-        <ThemeProvider
-            theme={appTheme}
-        >
-
-            <CssBaseline />
-
-            <AuthProvider>
-
-                {children}
-            </AuthProvider>
-
-
-        </ThemeProvider>
-    );
+      <AuthProvider>{children}</AuthProvider>
+    </ThemeProvider>
+  );
 }

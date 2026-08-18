@@ -3,16 +3,13 @@ package biz.michael_maldo.merkado.shared.dto;
 import java.time.LocalDateTime;
 
 public record ErrorResponse(
+  LocalDateTime timestamp,
 
-        LocalDateTime timestamp,
+  Integer status,
 
-        Integer status,
+  String error,
 
-        String error,
+  String message,
 
-        String message,
-
-        String path
-
-) {
-}
+  String path
+) {}

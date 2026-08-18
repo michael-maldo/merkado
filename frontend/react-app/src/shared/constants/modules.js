@@ -1,37 +1,36 @@
 export const modules = [
+  {
+    key: "catalog",
+    label: "Catalog",
+  },
 
-    {
-        key: "catalog",
-        label: "Catalog"
-    },
+  {
+    key: "inventory",
+    label: "Inventory",
+  },
 
-    {
-        key: "inventory",
-        label: "Inventory"
-    },
+  {
+    key: "clients",
+    label: "Clients",
+  },
 
-    {
-        key: "clients",
-        label: "Clients"
-    },
+  {
+    key: "orders",
+    label: "Orders",
+  },
 
-    {
-        key: "orders",
-        label: "Orders"
-    },
+  {
+    key: "warehouse",
+    label: "Warehouse",
+  },
 
-    {
-        key: "warehouse",
-        label: "Warehouse"
-    },
+  {
+    key: "pricing",
+    label: "Pricing",
+  },
 
-    {
-        key: "pricing",
-        label: "Pricing"
-    },
-
-    {
-        key: "analytics",
-        label: "Analytics"
-    }
+  {
+    key: "analytics",
+    label: "Analytics",
+  },
 ];

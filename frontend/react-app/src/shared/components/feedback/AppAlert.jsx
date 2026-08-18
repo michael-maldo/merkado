@@ -7,16 +7,10 @@ import Alert from "@mui/material/Alert";
  *   children: React.ReactNode
  * }} props
  */
-export default function AppAlert({
-                                     severity = "info",
-                                     children
-                                 }) {
-    return (
-        <Alert
-            severity={severity}
-            sx={{ mb: 2 }}
-        >
-            {children}
-        </Alert>
-    );
+export default function AppAlert({ severity = "info", children }) {
+  return (
+    <Alert severity={severity} sx={{ mb: 2 }}>
+      {children}
+    </Alert>
+  );
 }

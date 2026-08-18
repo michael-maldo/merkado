@@ -4,20 +4,21 @@ import Box from "@mui/material/Box";
 import { Outlet } from "react-router-dom";
 
 export default function AuthLayout() {
-    return (
-        <Box
-            sx={{
-                minHeight: "100vh",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
-                background: "linear-gradient(135deg, #10233f 0%, #1b4169 52%, #0c766e 100%)",
-                px: 2
-            }}
-        >
-            <Outlet />
-        </Box>
-    );
+  return (
+    <Box
+      sx={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        background:
+          "linear-gradient(135deg, #10233f 0%, #1b4169 52%, #0c766e 100%)",
+        px: 2,
+      }}
+    >
+      <Outlet />
+    </Box>
+  );
 }
 /*
 import {

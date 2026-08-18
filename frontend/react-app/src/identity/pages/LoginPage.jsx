@@ -3,163 +3,126 @@ import { useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
-import {
-    Box,
-    Typography
-} from "@mui/material";
+import { Box, Typography } from "@mui/material";
 
 import { useAuth } from "../hooks/useAuth";
 
-import AppButton
-    from "../../shared/components/buttons/AppButton";
+import AppButton from "../../shared/components/buttons/AppButton";
 
-import AppCard
-    from "../../shared/components/cards/AppCard";
+import AppCard from "../../shared/components/cards/AppCard";
 
-import AppTextField
-    from "../../shared/components/forms/AppTextField";
+import AppTextField from "../../shared/components/forms/AppTextField";
 
-import AppAlert
-    from "../../shared/components/feedback/AppAlert";
+import AppAlert from "../../shared/components/feedback/AppAlert";
 
 export default function LoginPage() {
+  const navigate = useNavigate();
 
-    const navigate = useNavigate();
+  const { login } = useAuth();
 
-    const { login } = useAuth();
+  const [username, setUsername] = useState("");
 
-    const [username, setUsername] =
-        useState("");
+  const [password, setPassword] = useState("");
 
-    const [password, setPassword] =
-        useState("");
+  const [loading, setLoading] = useState(false);
 
-    const [loading, setLoading] =
-        useState(false);
+  const [error, setError] = useState("");
 
-    const [error, setError] =
-        useState("");
+  const handleSubmit = async (event) => {
+    event.preventDefault();
 
-    const handleSubmit =
-        async (event) => {
+    setError("");
 
-            event.preventDefault();
+    try {
+      setLoading(true);
 
-            setError("");
+      await login(username, password);
 
-            try {
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Login failed:", err);
 
-                setLoading(true);
+      setError("Invalid username or password");
+    } finally {
+      setLoading(false);
+    }
+  };
 
-                await login(
-                    username,
-                    password
-                );
-
-                navigate(
-                    "/dashboard"
-                );
-
-            } catch (err) {
-
-                console.error(
-                    "Login failed:",
-                    err
-                );
-
-                setError(
-                    "Invalid username or password"
-                );
-
-            } finally {
-
-                setLoading(false);
-            }
-        };
-
-    return (
-
-        <AppCard
-            sx={{
-                width: "100%",
-                maxWidth: 420
-            }}
+  return (
+    <AppCard
+      sx={{
+        width: "100%",
+        maxWidth: 420,
+      }}
+    >
+      <Box component="form" onSubmit={handleSubmit}>
+        <Box
+          sx={{
+            width: 42,
+            height: 42,
+            mx: "auto",
+            mb: 2,
+            borderRadius: 1.25,
+            display: "grid",
+            placeItems: "center",
+            bgcolor: "primary.dark",
+            color: "white",
+            fontWeight: 800,
+          }}
         >
+          M
+        </Box>
+        <Typography
+          variant="h4"
+          align="center"
+          gutterBottom
+          sx={{ fontWeight: 800, letterSpacing: ".04em" }}
+        >
+          MERKADO
+        </Typography>
 
-            <Box
-                component="form"
-                onSubmit={handleSubmit}
-            >
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          align="center"
+          sx={{ mb: 3 }}
+        >
+          Sign in to the operations workspace
+        </Typography>
 
-                <Box sx={{ width: 42, height: 42, mx: "auto", mb: 2, borderRadius: 1.25, display: "grid", placeItems: "center", bgcolor: "primary.dark", color: "white", fontWeight: 800 }}>M</Box>
-                <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 800, letterSpacing: ".04em" }}>MERKADO</Typography>
+        {error && <AppAlert severity="error">{error}</AppAlert>}
 
-                <Typography
-                    variant="body2"
-                    color="text.secondary"
-                    align="center"
-                    sx={{ mb: 3 }}
-                >
-                    Sign in to the operations workspace
-                </Typography>
+        <AppTextField
+          label="Username"
+          value={username}
+          onChange={(event) => setUsername(event.target.value)}
+          autoComplete="username"
+          autoFocus
+          margin="normal"
+        />
 
-                {error && (
+        <AppTextField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(event) => setPassword(event.target.value)}
+          autoComplete="current-password"
+          margin="normal"
+        />
 
-                    <AppAlert
-                        severity="error"
-                    >
-                        {error}
-                    </AppAlert>
-
-                )}
-
-                <AppTextField
-                    label="Username"
-                    value={username}
-                    onChange={(event) =>
-                        setUsername(
-                            event.target.value
-                        )
-                    }
-                    autoComplete="username"
-                    autoFocus
-                    margin="normal"
-                />
-
-                <AppTextField
-                    label="Password"
-                    type="password"
-                    value={password}
-                    onChange={(event) =>
-                        setPassword(
-                            event.target.value
-                        )
-                    }
-                    autoComplete="current-password"
-                    margin="normal"
-                />
-
-                <AppButton
-                    type="submit"
-                    fullWidth
-                    disabled={
-                        loading ||
-                        !username ||
-                        !password
-                    }
-                    sx={{
-                        mt: 2
-                    }}
-                >
-                    {loading
-                        ? "Signing In..."
-                        : "Sign In"}
-                </AppButton>
-
-            </Box>
-
-        </AppCard>
-    );
+        <AppButton
+          type="submit"
+          fullWidth
+          disabled={loading || !username || !password}
+          sx={{
+            mt: 2,
+          }}
+        >
+          {loading ? "Signing In..." : "Sign In"}
+        </AppButton>
+      </Box>
+    </AppCard>
+  );
 }
 
 /*
@@ -314,9 +277,6 @@ export default function LoginPage() {
 
  */
 
-
-
-
 // import React from "react";
 // import { useState } from "react";
 
@@ -344,7 +304,6 @@ export default function LoginPage() {
 
 //       const response =
 //         await axios.post(
-
 
 //           //DEV
 //           "http://localhost:8080/api/v1/auth/login",

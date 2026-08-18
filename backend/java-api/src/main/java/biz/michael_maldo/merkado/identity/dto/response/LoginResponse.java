@@ -1,12 +1,9 @@
 package biz.michael_maldo.merkado.identity.dto.response;
 
 public record LoginResponse(
+  String accessToken,
 
-        String accessToken,
+  String refreshToken,
 
-        String refreshToken,
-
-        Long expiresIn
-
-) {
-}
+  Long expiresIn
+) {}

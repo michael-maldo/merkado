@@ -1,37 +1,22 @@
 import React from "react";
-import {
-    Navigate
-}
-from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Box, CircularProgress } from "@mui/material";
 
-import {
-    useAuth
-}
-from "../hooks/useAuth";
+import { useAuth } from "../hooks/useAuth";
 
-export default function
-ProtectedRoute({
-    children
-}) {
+export default function ProtectedRoute({ children }) {
+  const { isAuthenticated, loading } = useAuth();
 
-    const {
-        isAuthenticated, loading
-    } = useAuth();
+  if (loading)
+    return (
+      <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center" }}>
+        <CircularProgress />
+      </Box>
+    );
 
-    if (loading) return <Box sx={{ minHeight: "100vh", display: "grid", placeItems: "center" }}><CircularProgress /></Box>;
+  if (!isAuthenticated) {
+    return <Navigate to="/login" replace />;
+  }
 
-    if (
-        !isAuthenticated
-    ) {
-
-        return (
-            <Navigate
-                to="/login"
-                replace
-            />
-        );
-    }
-
-    return children;
+  return children;
 }
